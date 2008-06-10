@@ -2,18 +2,17 @@
 # Conditional build:
 %bcond_without	tests		# build without tests
 #
-# TODO
-# - clarify license -- COPYING in sources is gplv2 but on homepage link is to gplv3
 Summary:	SIGAR - System Information Gatherer And Reporter
 Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
 Version:	1.4.0.0
 Release:	0.1
-License:	GPL v3
+License:	GPL v2
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/sigar/hyperic-%{name}-%{version}-src.tar.gz
 # Source0-md5:	0e3718c99c183f194578ba39cf207a65
 Source1:	http://jan.kneschke.de/assets/2007/2/16/hyperic-%{name}-1.3.0.0-src-cmake.tar.gz
+# Source1-md5:	b77d087ab92c07d40706716d7496d1f6
 URL:		http://sigar.hyperic.com/
 BuildRequires:	ant >= 1.6.5
 BuildRequires:	cmake
