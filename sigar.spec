@@ -5,6 +5,7 @@
 # TODO
 # - clarify license -- COPYING in sources is gplv2 but on homepage link is to gplv3
 Summary:	SIGAR - System Information Gatherer And Reporter
+Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
 Version:	1.4.0.0
 Release:	0.1
@@ -23,8 +24,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 The Sigar API provides a portable interface for gathering system
 information such as:
-- System memory, swap, cpu, load average, uptime, logins
-- Per-process memory, cpu, credential info, state, arguments,
+- System memory, swap, CPU, load average, uptime, logins
+- Per-process memory, CPU, credential info, state, arguments,
   environment, open files
 - File system detection and metrics
 - Network interface detection, configuration info and metrics
@@ -36,6 +37,22 @@ API to access this information regardless of the underlying platform.
 The core API is implemented in pure C with bindings currently
 implemented for Java, Perl and C#.
 
+%description
+Sigar API udostępnia przenośny interfejs do zbierania informacji
+systemowych, takich jak:
+- systemowa pamięć, swap, procesor, obciążenie, czas pracy, logowania
+- informacje dla procesów: pamięć, wykorzystanie procesora,
+  uprawnienia, stan, argumenty, środowisko, otwarte pliki
+- wykrywanie i pomiary systemów plików
+- wykrywanie informacji sieciowych, informacje o konfiguracji i
+  pomiary
+- tablice tras i połączeń sieciowych
+
+Informacje te są dostępne w większości systemów operacyjnych, ale
+każdy system ma własny sposób udostępniania ich. SIGAR udostępnia
+programistom jedno API pozwalające na dostęp dotych informacji
+niezależnie od platformy. Podstawowe API jest zaimplementowane w
+czystym C, z wiązaniami dla Javy, Perla i C#.
 
 %prep
 %setup -q -n hyperic-%{name}-%{version}-src -a1
