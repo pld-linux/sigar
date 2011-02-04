@@ -36,7 +36,7 @@ API to access this information regardless of the underlying platform.
 The core API is implemented in pure C with bindings currently
 implemented for Java, Perl and C#.
 
-%description
+%description -l pl.UTF-8
 Sigar API udostępnia przenośny interfejs do zbierania informacji
 systemowych, takich jak:
 - systemowa pamięć, swap, procesor, obciążenie, czas pracy, logowania
