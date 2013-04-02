@@ -2,21 +2,22 @@
 # Conditional build:
 %bcond_without	tests		# build without tests
 
+%include	/usr/lib/rpm/macros.java
 Summary:	SIGAR - System Information Gatherer And Reporter
 Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
 Version:	1.6.5
-Release:	0.1
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 Source0:	%{name}-%{version}-58097d9.tbz2
 # Source0-md5:	a8dfe38ed914a364943f746489b79539
 URL:		http://sigar.hyperic.com/
 BuildRequires:	ant >= 1.6.5
-BuildRequires:	sed >= 4.0
 BuildRequires:	cmake
 BuildRequires:	jdk >= 1.3
 BuildRequires:	perl-base >= 5.6.1
+BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -54,12 +55,22 @@ czystym C, z wiązaniami dla Javy, Perla i C#.
 
 %package devel
 Summary:	SIGAR Development package - System Information Gatherer And Reporter
-License:	Apache v2.0
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for developing against the Sigar API
+
+%package -n java-%{name}
+Summary:	Java bindings to sigar library
+Group:		Libraries/Java
+Requires:	%{name} = %{version}-%{release}
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
+
+%description -n java-%{name}
+Java bindings to Sigar library.
 
 %prep
 %setup -q
@@ -87,6 +98,10 @@ install -d $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_javadir}
+cp -p bindings/java/sigar-bin/lib/sigar.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
+ln -s %{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -102,3 +117,8 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/sigar*.h
+
+%files -n java-%{name}
+%defattr(644,root,root,755)
+%{_javadir}/sigar-%{version}.jar
+%{_javadir}/sigar.jar
