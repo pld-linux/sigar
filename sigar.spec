@@ -1,20 +1,19 @@
 #
 # Conditional build:
 %bcond_without	tests		# build without tests
-#
+
 Summary:	SIGAR - System Information Gatherer And Reporter
 Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
-Version:	1.4.0.0
+Version:	1.6.5
 Release:	0.1
-License:	GPL v2
+License:	Apache v2.0
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/sigar/hyperic-%{name}-%{version}-src.tar.gz
-# Source0-md5:	0e3718c99c183f194578ba39cf207a65
-Source1:	http://jan.kneschke.de/assets/2007/2/16/hyperic-%{name}-1.3.0.0-src-cmake.tar.gz
-# Source1-md5:	b77d087ab92c07d40706716d7496d1f6
+Source0:	%{name}-%{version}-58097d9.tbz2
+# Source0-md5:	a8dfe38ed914a364943f746489b79539
 URL:		http://sigar.hyperic.com/
 BuildRequires:	ant >= 1.6.5
+BuildRequires:	sed >= 4.0
 BuildRequires:	cmake
 BuildRequires:	jdk >= 1.3
 BuildRequires:	perl-base >= 5.6.1
@@ -53,14 +52,27 @@ programistom jedno API pozwalające na dostęp dotych informacji
 niezależnie od platformy. Podstawowe API jest zaimplementowane w
 czystym C, z wiązaniami dla Javy, Perla i C#.
 
+%package devel
+Summary:	SIGAR Development package - System Information Gatherer And Reporter
+License:	Apache v2.0
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for developing against the Sigar API
+
 %prep
-%setup -q -n hyperic-%{name}-%{version}-src -a1
+%setup -q
+
+%{__sed} -i -e 's,DESTINATION lib$,DESTINATION %{_lib},' src/CMakeLists.txt
 
 %build
-%cmake .
+install -d build
+cd build
+%cmake ..
 %{__make}
 
-cd bindings/java
+cd ../bindings/java
 %ant
 chmod a+rx sigar-bin/lib/lib*.so
 
@@ -72,10 +84,21 @@ cd ../..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
+%{__make} -C build install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+# no SONAME, but run ldconfig to update ld.so.cache
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog LICENSES README
+%doc AUTHORS ChangeLog NOTICE README
+%attr(755,root,root) %{_libdir}/libsigar.so
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/sigar*.h
