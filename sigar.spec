@@ -7,7 +7,7 @@ Summary:	SIGAR - System Information Gatherer And Reporter
 Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
 Version:	1.6.5
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries
 Source0:	%{name}-%{version}-58097d9.tbz2
@@ -64,10 +64,7 @@ Header files for developing against the Sigar API
 %package -n java-%{name}
 Summary:	Java bindings to sigar library
 Group:		Libraries/Java
-Requires:	%{name} = %{version}-%{release}
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
+# does not use base library
 
 %description -n java-%{name}
 Java bindings to Sigar library.
@@ -99,6 +96,7 @@ install -d $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_javadir}
+install -p bindings/java/sigar-bin/lib/libsigar-*-*.so $RPM_BUILD_ROOT%{_libdir}
 cp -p bindings/java/sigar-bin/lib/sigar.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
 ln -s %{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
 
@@ -108,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 # no SONAME, but run ldconfig to update ld.so.cache
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
+
+%post	-n java-%{name} -p /sbin/ldconfig
+%postun	-n java-%{name} -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -122,3 +123,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_javadir}/sigar-%{version}.jar
 %{_javadir}/sigar.jar
+%attr(755,root,root) %{_libdir}/libsigar-*-*.so
