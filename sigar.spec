@@ -2,7 +2,6 @@
 # Conditional build:
 %bcond_without	tests		# build without tests
 
-%include	/usr/lib/rpm/macros.java
 Summary:	SIGAR - System Information Gatherer And Reporter
 Summary(pl.UTF-8):	SIGAR - narzędzie do zbierania i raportowania informacji systemowych
 Name:		sigar
